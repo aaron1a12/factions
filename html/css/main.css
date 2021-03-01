@@ -59,3 +59,16 @@ body,html {margin:0;padding:0;height:100%;}
 .scoreboard tbody td {
     padding-top: 20px;
 }
+
+
+#reticle-container {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}

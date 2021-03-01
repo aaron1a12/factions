@@ -12,6 +12,7 @@
     </head>
     
     <body>
+        <div id="reticle-container"><img id="reticle"></div>
 
         <div id="timer">08:59</div>
 
@@ -49,14 +50,39 @@
                     document.getElementById("scoreboard-container").style.display = "flex";
                 break;
                 case "onResetRound":
-                document.getElementById("scoreboard-container").style.display = "none";
+                    document.getElementById("scoreboard-container").style.display = "none";
                 break;
-                
+                case "showReticule":
+                    ShowReticle(Number(event.data.type));
+                break;   
+                case "hideReticule":
+                    HideReticle();
+                break;                 
             }
 
         });
     });
 
+    function ShowReticle(type) {
+        var reticuleImg = document.getElementById("reticle");
+        var reticuleCont = document.getElementById("reticle-container");
+
+        switch(type) {
+            default:
+            case 0:
+                reticuleImg.src = "img/reticle.png";
+            break;
+            case 1:
+                reticuleImg.src = "img/reticle_shotgun.png";
+            break;
+        }
+
+        reticuleCont.style.display = "flex";
+    }
+
+    function HideReticle() {
+        document.getElementById("reticle-container").style.display = "none";
+    }
 
     function UpdateTime(sec_num) {
         var timerDiv = document.getElementById("timer");

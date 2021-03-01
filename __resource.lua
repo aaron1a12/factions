@@ -6,12 +6,15 @@ client_scripts {
 	'global.lua',
 	'respawn.lua',
 	'mood.lua',
-	'client.lua'
+	'reticule.lua',
+	'client.lua',
+	'Client.net.dll',
 }
 
 server_scripts {
 	'config.lua',
 	'server.lua',
+	'Server.net.dll',	
 }
 
 dependencies {
@@ -21,6 +24,7 @@ ui_page('html/index.html')
 
 files {
 	'html/index.html',
+	'html/img/reticle.png',
 	'html/css/main.css',
 	'html/css/DIN-Medium.ttf',
 	'html/js/howler.min.js',
