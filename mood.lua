@@ -44,7 +44,7 @@ Citizen.CreateThread(function()
         NetworkOverrideClockTime(12, 0, 0)
 
         -- Hide the radar
-        DisplayRadar(false)
+        DisplayRadar(true)
     end
 end)
 

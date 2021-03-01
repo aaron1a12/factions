@@ -34,7 +34,7 @@ AddEventHandler("cl_playerHasDied", function()
     print("cl_playerHasDied")
 
     SendNUIMessage({
-        type = 'open'
+        name = 'playDeathSound'
     })
     
     local playerOffset = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 0.0, 0.0)
@@ -92,14 +92,18 @@ function respawnPed()
     local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
     NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
 
+
+    
+    local playerPed = GetPlayerPed(-1)
+
     -- Give weapon set
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_REVOLVER"), 22, false, false)
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_PISTOL"), 22, false, false)    
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_PUMPSHOTGUN"), 22, false, false)    
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_MACHETE"), 1, false, false)  
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_GOLFCLUB"), 1, false, false)
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_MOLOTOV"), 12, false, false)
-    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("WEAPON_PIPEBOMB"), 12, false, false)
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_REVOLVER"), 22, false, false)
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PISTOL"), 22, false, false)    
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PUMPSHOTGUN"), 22, false, false)    
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_MACHETE"), 1, false, false)  
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_GOLFCLUB"), 1, false, false)
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_MOLOTOV"), 12, false, false)
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PIPEBOMB"), 12, false, false)
 
     bPlayerHasDied = false
 end
@@ -120,3 +124,4 @@ Citizen.CreateThread(function()
 
     end
 end)
+

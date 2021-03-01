@@ -2,6 +2,7 @@ resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
 
 client_scripts {
+	'config.lua',
 	'global.lua',
 	'respawn.lua',
 	'mood.lua',
@@ -9,7 +10,8 @@ client_scripts {
 }
 
 server_scripts {
-	--'server.lua',
+	'config.lua',
+	'server.lua',
 }
 
 dependencies {
@@ -19,6 +21,8 @@ ui_page('html/index.html')
 
 files {
 	'html/index.html',
+	'html/css/main.css',
+	'html/css/DIN-Medium.ttf',
 	'html/js/howler.min.js',
 	'html/sounds/death.ogg'
 }
