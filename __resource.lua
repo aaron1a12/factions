@@ -1,5 +1,6 @@
 resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
+this_is_a_map 'yes'
 
 client_scripts {
 	'config.lua',
@@ -35,9 +36,11 @@ files {
 files {
 	'weapons.meta',
 	'weaponrevolver.meta',
-	'weaponanimations.meta'
+	'weaponanimations.meta',
+	'weapons_doubleaction.meta'
 }
  
 data_file 'WEAPONINFO_FILE_PATCH' 'weapons.meta'
 data_file 'WEAPONINFO_FILE_PATCH' 'weaponrevolver.meta'
+data_file 'WEAPONINFO_FILE_PATCH' 'weapons_doubleaction.meta'
 data_file 'WEAPON_ANIMATIONS_FILE' 'weaponanimations.meta'
