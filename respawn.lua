@@ -99,7 +99,7 @@ function respawnPed()
     SetCanAttackFriendly(playerPed, true, true)
 
     -- Give weapon set
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_REVOLVER"), 22, false, false)
+    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_DOUBLEACTION"), 22, false, false)
     GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PISTOL"), 22, false, false)    
     GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PUMPSHOTGUN"), 22, false, false)    
     GiveWeaponToPed(playerPed, GetHashKey("WEAPON_MACHETE"), 1, false, false)  
