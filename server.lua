@@ -2,8 +2,9 @@ local Round = {}
 
 function ResetRound()
     Round.TimeLeft = Config.Round.DefaultTime
+    Round.CurrentMood = Config.Moods[ math.random( #Config.Moods ) ]
 
-    TriggerClientEvent('factions:cl_onResetRound', -1)
+    TriggerClientEvent('factions:cl_onResetRound', -1, Round)
 end ResetRound()
 
 function OnRoundEnd()

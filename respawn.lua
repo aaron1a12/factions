@@ -91,10 +91,12 @@ local bPlayerHasDied = false
 function respawnPed()
     local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
     NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
-
-
     
     local playerPed = GetPlayerPed(-1)
+
+    -- Enable pvp
+    NetworkSetFriendlyFireOption(true)
+    SetCanAttackFriendly(playerPed, true, true)
 
     -- Give weapon set
     GiveWeaponToPed(playerPed, GetHashKey("WEAPON_REVOLVER"), 22, false, false)

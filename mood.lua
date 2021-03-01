@@ -2,6 +2,8 @@
 
 local weatherType = "FOGGY"
 
+local currentMood = nil
+
 -- Disable normal peds
 
 Citizen.CreateThread(function()
@@ -24,7 +26,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(1000)
+        Citizen.Wait(100)
     
         -- Disable ambient sounds
         StartAudioScene("CHARACTER_CHANGE_IN_SKY_SCENE")
@@ -35,20 +37,26 @@ Citizen.CreateThread(function()
         -- No power
         SetBlackout(true)
 
-        ClearOverrideWeather()
-        ClearWeatherTypePersist()
-        SetWeatherTypePersist(weatherType)
-        SetWeatherTypeNow(weatherType)
-        SetWeatherTypeNowPersist(weatherType)
-
-        NetworkOverrideClockTime(12, 0, 0)
-
         -- Hide the radar
-        DisplayRadar(true)
+        DisplayRadar(false)
+
+        if currentMood ~= nil then
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+            SetWeatherTypePersist(currentMood.Weather)
+            SetWeatherTypeNow(currentMood.Weather)
+            SetWeatherTypeNowPersist(currentMood.Weather)
+
+            NetworkOverrideClockTime(currentMood.Hour, 0, 0)
+            SetTimecycleModifier(currentMood.Look)
+            SetTimecycleModifierStrength(currentMood.Intensity)
+        end
     end
 end)
 
 
-SetTimecycleModifier("int_Lost_small")
-SetTimecycleModifierStrength(0.9)
-
+AddEventHandler("factions:cl_onResetRound", function(RoundInfo)
+    print("Setting New Mood")
+    currentMood = RoundInfo.CurrentMood
+end)
+RegisterNetEvent("factions:cl_onResetRound")
