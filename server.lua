@@ -36,3 +36,10 @@ RegisterServerEvent('factions:getRoundTimeLeft')
 AddEventHandler('factions:getRoundTimeLeft', function(cbId)
     TriggerClientEvent('factions:cl_getRoundTimeLeft', source, Round.TimeLeft, cbId)
 end)
+
+
+-- Callback demo
+AddEventHandler("factions:foo", function(args, cbId)
+    TriggerClientEvent('factions:cl_onCallback_OneParam', source, cbId, "bar")
+end)
+RegisterServerEvent("factions:foo")

@@ -2,7 +2,6 @@ SendNUIMessage({
     type = 'open'
 })
 
-CallbackTable = {}
 
 RegisterNUICallback('getRoundTimeLeft', function(data, cb)
     -- and so does callback response data
