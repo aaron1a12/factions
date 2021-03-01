@@ -1,0 +1,43 @@
+<html><head>
+    <meta charset="UTF-8">
+    <title>Title of the document</title>
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="js/jquery-3.5.1.js" type="text/javascript"></script>
+    <script src="js/howler.min.js" type="text/javascript"></script>
+    
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <script>
+        function print(msg, bIsPlayer) {
+            if(bIsPlayer)
+                $("#texts").append("<div class=\"bubble player\">"+msg+"</div>");
+            else
+                $("#texts").append("<div class=\"bubble\">"+msg+"</div>");
+        }
+    </script>
+    <style>
+    
+    </style>
+    </head>
+    
+    <body>
+    <script type="text/javascript">
+    var sndDeath = new Howl({src: ['sounds/death.ogg'],volume: 0.3});
+    
+    $(function() {       
+        window.addEventListener('message', function(event) {
+            console.log("message!?");
+            sndDeath.play();
+            if (event.data.type == "openPhone"){
+                openPhone();			
+            }
+        });
+    });     
+    </script>
+    
+    <script>
+    //$(function() {window.dispatchEvent( new Event('message') );});
+    //openPhone();
+    </script>
+    
+    </body>
+    </html>

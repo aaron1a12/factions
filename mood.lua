@@ -16,6 +16,9 @@ Citizen.CreateThread(function()
         SetPedDensityMultiplierThisFrame(0.0)
         SetVehicleDensityMultiplierThisFrame(0.0)
         SetParkedVehicleDensityMultiplierThisFrame(0.0)
+
+        SetPedShootRate(GetPlayerPed(-1), 0)
+        DisableFirstPersonCamThisFrame()
     end
 end)
 
@@ -40,10 +43,12 @@ Citizen.CreateThread(function()
 
         NetworkOverrideClockTime(12, 0, 0)
 
-        --SetTimecycleModifier("plane_inside_mode")
+        -- Hide the radar
+        DisplayRadar(false)
     end
 end)
 
 
 SetTimecycleModifier("int_Lost_small")
 SetTimecycleModifierStrength(0.9)
+
