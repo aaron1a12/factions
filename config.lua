@@ -34,7 +34,7 @@ Config.Models = {
 
 Config.Ranks = {
     {
-        ['MinScore'] = 0, ['Unlocks'] = {{'WEAPON_MACHETE'}, {'WEAPON_SMG', 64, 'COMPONENT_AT_PI_SUPP'}}
+        ['MinScore'] = 0, ['Unlocks'] = {{'WEAPON_MACHETE'}}
     },
     {
         ['MinScore'] = 1, ['Unlocks'] = {{'WEAPON_PISTOL', 1}}
