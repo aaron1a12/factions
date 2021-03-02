@@ -1,6 +1,6 @@
 resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
-this_is_a_map 'yes'
+--this_is_a_map 'yes'
 
 client_scripts {
 	'config.lua',
@@ -26,6 +26,7 @@ ui_page('html/index.html')
 files {
 	'html/index.html',
 	'html/img/reticle.png',
+	'html/img/reticle_shotgun.png',
 	'html/css/main.css',
 	'html/css/DIN-Medium.ttf',
 	'html/js/howler.min.js',
