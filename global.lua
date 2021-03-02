@@ -34,8 +34,8 @@ end
 CallbackTable = {}
 
 function Call(svEventName, args, callback)
-    
-    if type(callback) == "function" then
+    local cbType = type(callback)
+    if cbType == "function" or cbType == "table" then
         local callbackId = randomString(8)
         CallbackTable[callbackId] = callback
 
@@ -70,3 +70,15 @@ AddEventHandler("factions:cl_onCallback_AnyParam", function(callbackId, ret1, re
 
     CallbackTable[callbackId] = nil
 end) RegisterNetEvent("factions:cl_onCallback_AnyParam")
+
+-- For debuging mainly
+
+function ShowNotification(text)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawNotification(false, false)
+end
+
+-- Singleton for Client
+
+Global = {}

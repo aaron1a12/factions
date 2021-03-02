@@ -14,7 +14,7 @@
     <body>
         <div id="reticle-container"><img id="reticle"></div>
 
-        <div id="timer">08:59</div>
+        <div id="timer"></div>
 
 
         <div id="scoreboard-container">
@@ -24,12 +24,13 @@
                         <td>Player</td>
                         <td>Kills</td>
                         <td>Deaths</td>
+                        <td>K/D Ratio</td>
                     </tr>
                 </thead>
                 
-                <tbody>
+                <tbody id="scoreboard-rows">
                     <tr>
-                        <td>Aaron</td>
+                        <td>Joel</td>
                         <td>7</td>
                         <td>6</td>
                     </tr>
@@ -38,7 +39,59 @@
         </div>
 
     <script type="text/javascript">
+    const musicBeginVolume = 0.05;
+    const musicEndVolume = 0.3;
+
+    const matchLength = (60 * 7) + 34;
+    var matchTimeElapsed = matchLength;
+
     var sndDeath = new Howl({src: ['sounds/death.ogg'],volume: 0.3});
+    var sndMatchMusic = new Howl({src: ['sounds/wlf.ogg'],volume: 0.1});
+
+    function ShowScoreboard(){
+        fetch(`https://${GetParentResourceName()}/getScoreboard`).then(resp => resp.json()).then(function(resp){
+            document.getElementById("scoreboard-container").style.display = "flex";
+
+            var tbody = document.getElementById("scoreboard-rows");
+
+            var scoresArray = [];
+
+            const keys = Object.keys(resp);
+
+            for (const key of keys) {
+                resp[key].KDRatio = Math.round((Number(resp[key].Kills) / Number(resp[key].Deaths)) * 100) / 100;
+                resp[key].KDRatio = isNaN(resp[key].KDRatio) ? 0 : resp[key].KDRatio;
+
+                scoresArray.push(resp[key]);
+            }            
+
+            tbody.innerHTML = "";
+
+            scoresArray.sort((a, b) => (a.KDRatio < b.KDRatio) ? 1 : -1);
+
+            for(var i = 0; i < scoresArray.length; i++) {
+
+                var tr = document.createElement("tr");
+                var tdPlayer = document.createElement("td");
+                var tdKills = document.createElement("td");
+                var tdDeaths = document.createElement("td");
+                var tdKDRatio = document.createElement("td");
+
+                tdPlayer.appendChild(document.createTextNode( scoresArray[i].Name ));
+                tdKills.appendChild(document.createTextNode( scoresArray[i].Kills ));
+                tdDeaths.appendChild(document.createTextNode( scoresArray[i].Deaths ));
+                tdKDRatio.appendChild(document.createTextNode( scoresArray[i].KDRatio ));
+
+                tr.appendChild(tdPlayer);
+                tr.appendChild(tdKills);
+                tr.appendChild(tdDeaths);
+                tr.appendChild(tdKDRatio);
+
+                tbody.appendChild(tr);
+            }
+
+        });           
+    }
     
     $(function() {       
         window.addEventListener('message', function(event) {
@@ -46,11 +99,13 @@
                 case "playDeathSound":
                     sndDeath.play();
                 break;
+                case "showScoreboard":
                 case "onRoundEnd":
-                    document.getElementById("scoreboard-container").style.display = "flex";
+                    ShowScoreboard();
                 break;
+                case "hideScoreboard":
                 case "onResetRound":
-                    document.getElementById("scoreboard-container").style.display = "none";
+                    document.getElementById("scoreboard-container").style.display = "none";                    
                 break;
                 case "showReticule":
                     ShowReticle(Number(event.data.type));
@@ -58,6 +113,21 @@
                 case "hideReticule":
                     HideReticle();
                 break;                 
+            }
+
+            if (event.data.name == "onResetRound")
+            {
+                fetch(`https://${GetParentResourceName()}/getRoundTimeLeft`).then(resp => resp.json()).then(function(resp){
+                    
+                    matchTimeElapsed = matchLength - Number(resp);
+                    console.log("Joined midway, seek to " + matchTimeElapsed);
+                    console.log(`Fade time: ${Number(resp)}`);
+                    sndMatchMusic.seek(matchTimeElapsed);
+                    var id1 = sndMatchMusic.play();
+
+                    //sndMatchMusic.fade(4.3, 0.05, Number(resp), id1);
+                    //sndMatchMusic.rate(4.5, id1);
+                });
             }
 
         });

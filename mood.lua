@@ -6,6 +6,10 @@ local currentMood = nil
 
 -- Disable normal peds
 
+AddEventHandler('populationPedCreating', function(x, y, z, model, overrideCalls)
+    overrideCalls.setModel(71929310) --clown model hash disables peds? wtf
+end)
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -54,6 +58,15 @@ Citizen.CreateThread(function()
     end
 end)
 
+
+function UpdateMood( newMood )
+    currentMood = newMood
+end
+
+
+AddEventHandler('factions:updateMood', function(newMood)
+    currentMood = newMood
+end)
 
 AddEventHandler("factions:cl_onResetRound", function(RoundInfo)
     print("Setting New Mood")

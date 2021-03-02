@@ -14,6 +14,10 @@ spawnPoints = {
 
 local deathCam = nil
 
+
+
+
+
 function AnimateCamera()
     local headPos = GetPedBoneCoords(GetPlayerPed(-1), 31086, 0.0, 0.0, 0.0)
 
@@ -30,8 +34,21 @@ function AnimateCamera()
     SetCamRot(deathCam, -50.0, 20.0, camAngle, 2)
 end
 
+local bPlayerHasDied = false
+
 AddEventHandler("cl_playerHasDied", function()
-    print("cl_playerHasDied")
+    local playerPed = GetPlayerPed(-1)
+
+    local killerPed = GetPedSourceOfDeath(playerPed)
+    local killerPlayerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(killerPed))
+    local killerName = GetPlayerName(NetworkGetPlayerIndexFromPed(killerPed))
+
+    if killerPed ~= 0 then
+        TriggerServerEvent("factions:reportDeath", killerPlayerId)
+    else
+        TriggerServerEvent("factions:reportDeath")
+    end
+    
 
     SendNUIMessage({
         name = 'playDeathSound'
@@ -86,26 +103,45 @@ AddEventHandler("cl_playerHasDied", function()
     respawnPed()
 end)
 
-local bPlayerHasDied = false
-
 function respawnPed()
-    local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
-    NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
+
+    -- Load model
+    local model = GetHashKey(Global.Round.Scoreboard[GetPlayerServerId()].Character)
+	RequestModel(model)
+	while not HasModelLoaded(model) do
+		Wait(1)	
+    end
     
+    -- Change
+    SetPlayerModel(PlayerId(), model) 
+    SetModelAsNoLongerNeeded(model)
+
+    -- Clean and choose a new spawn point
+
     local playerPed = GetPlayerPed(-1)
+
+    ClearPedBloodDamage(playerPed)
+    
+    local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
+
+    if bPlayerHasDied then
+        NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
+    else
+        StartPlayerTeleport(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, true, true)
+        StopPlayerTeleport()
+
+        SetEntityCoords(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z)
+        SetEntityHeading(newSpawnPoint.h)
+    end
 
     -- Enable pvp
     NetworkSetFriendlyFireOption(true)
     SetCanAttackFriendly(playerPed, true, true)
 
-    -- Give weapon set
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_REVOLVER"), 22, false, false)
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PISTOL"), 22, false, false)    
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PUMPSHOTGUN"), 22, false, false)    
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_MACHETE"), 1, false, false)  
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_GOLFCLUB"), 1, false, false)
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_MOLOTOV"), 12, false, false)
-    GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PIPEBOMB"), 12, false, false)
+    RemoveAllPedWeapons(playerPed, true)
+    TriggerEvent("getWeaponLoadout")
+
+    ShakeGameplayCam('SKY_DIVING_SHAKE', 0.0)
 
     bPlayerHasDied = false
 end

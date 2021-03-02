@@ -8,6 +8,7 @@ client_scripts {
 	'respawn.lua',
 	'mood.lua',
 	'reticule.lua',
+	'cam.lua',
 	'client.lua',
 	'Client.net.dll',
 }
@@ -26,10 +27,12 @@ ui_page('html/index.html')
 files {
 	'html/index.html',
 	'html/img/reticle.png',
+	'html/img/reticle_shotgun.png',
 	'html/css/main.css',
 	'html/css/DIN-Medium.ttf',
 	'html/js/howler.min.js',
-	'html/sounds/death.ogg'
+	'html/sounds/death.ogg',
+	'html/sounds/wlf.ogg',
 }
 
 
