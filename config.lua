@@ -43,10 +43,10 @@ Config.Ranks = {
         ['MinScore'] = 2, ['Unlocks'] = {{'WEAPON_PISTOL', 4}, {'WEAPON_MOLOTOV', 2}}
     },
     {
-        ['MinScore'] = 4, ['Unlocks'] = {{'WEAPON_PISTOL', 8}, {'WEAPON_REVOLVER', 4}}
+        ['MinScore'] = 4, ['Unlocks'] = {{'WEAPON_PISTOL', 8}, {'WEAPON_DOUBLEACTION', 4}}
     },
     {
-        ['MinScore'] = 8, ['Unlocks'] = {{'WEAPON_PISTOL', 14}, {'WEAPON_REVOLVER', 12}, {'WEAPON_PUMPSHOTGUN', 6}}
+        ['MinScore'] = 8, ['Unlocks'] = {{'WEAPON_PISTOL', 14}, {'WEAPON_DOUBLEACTION', 12}, {'WEAPON_PUMPSHOTGUN', 6}}
     },
     {
         ['MinScore'] = 16, ['Unlocks'] = {{'WEAPON_PUMPSHOTGUN', 12}, {'WEAPON_PIPEBOMB', 2}}
