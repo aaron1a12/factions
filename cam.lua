@@ -1,6 +1,6 @@
 charCam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
 
-SetCamActive(charCam, false)
+--SetCamActive(charCam, true)
 
 -- Blend in
 --RenderScriptCams(true, true, 0, true, true)
@@ -61,7 +61,8 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    while false do
+    while true do
+        Citizen.Wait(0)
 --ShakeGameplayCam(‘SMALL_EXPLOSION_SHAKE’, 0.18)
         --SetGameplayCamShakeAmplitude(5.0)
         local camCoords = GetGameplayCamCoord()
@@ -70,7 +71,7 @@ Citizen.CreateThread(function()
         --print(camHeading)
 
         --local playerVector = GetEntityCoords(GetPlayerPed(-1))
-        local _, forwardVector, _, position = GetEntityMatrix(vehicle)
+        --local _, forwardVector, _, position = GetEntityMatrix(vehicle)
 
         local forwardVector, rightVector, upVector, position = GetEntityMatrix(GetPlayerPed(-1))        
         local playerVector = (upVector * 0.5) + (rightVector * 0.5) + position
@@ -92,7 +93,7 @@ Citizen.CreateThread(function()
         --SetGameplayCamShakeAmplitude(1.0)
         --SetFollowPedCamThisUpdate(charCam, 0)
         --SetFollowPedCamViewMode(1)
-        Citizen.Wait(0)
+       
 
         
     end

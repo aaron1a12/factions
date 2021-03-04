@@ -104,46 +104,47 @@ AddEventHandler("cl_playerHasDied", function()
 end)
 
 function respawnPed()
+    Call('factions:getMyId', {}, function(playerId)
+        -- Load model
+        local model = GetHashKey(Global.Round.Scoreboard[playerId].Character)
+        RequestModel(model)
+        while not HasModelLoaded(model) do
+            Wait(1)	
+        end
+        
+        -- Change
+        SetPlayerModel(PlayerId(), model) 
+        SetModelAsNoLongerNeeded(model)
 
-    -- Load model
-    local model = GetHashKey(Global.Round.Scoreboard[GetPlayerServerId()].Character)
-	RequestModel(model)
-	while not HasModelLoaded(model) do
-		Wait(1)	
-    end
-    
-    -- Change
-    SetPlayerModel(PlayerId(), model) 
-    SetModelAsNoLongerNeeded(model)
+        -- Clean and choose a new spawn point
 
-    -- Clean and choose a new spawn point
+        local playerPed = GetPlayerPed(-1)
 
-    local playerPed = GetPlayerPed(-1)
+        ClearPedBloodDamage(playerPed)
+        
+        local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
 
-    ClearPedBloodDamage(playerPed)
-    
-    local newSpawnPoint = spawnPoints[ math.random( #spawnPoints ) ]
+        if bPlayerHasDied then
+            NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
+        else
+            StartPlayerTeleport(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, true, true)
+            StopPlayerTeleport()
 
-    if bPlayerHasDied then
-        NetworkResurrectLocalPlayer(newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, false) 
-    else
-        StartPlayerTeleport(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z, newSpawnPoint.h, true, true, true)
-        StopPlayerTeleport()
+            SetEntityCoords(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z)
+            SetEntityHeading(newSpawnPoint.h)
+        end
 
-        SetEntityCoords(playerPed, newSpawnPoint.x, newSpawnPoint.y, newSpawnPoint.z)
-        SetEntityHeading(newSpawnPoint.h)
-    end
+        -- Enable pvp
+        NetworkSetFriendlyFireOption(true)
+        SetCanAttackFriendly(playerPed, true, true)
 
-    -- Enable pvp
-    NetworkSetFriendlyFireOption(true)
-    SetCanAttackFriendly(playerPed, true, true)
+        RemoveAllPedWeapons(playerPed, true)
+        TriggerEvent("getWeaponLoadout")
 
-    RemoveAllPedWeapons(playerPed, true)
-    TriggerEvent("getWeaponLoadout")
+        ShakeGameplayCam('SKY_DIVING_SHAKE', 0.0)
 
-    ShakeGameplayCam('SKY_DIVING_SHAKE', 0.0)
-
-    bPlayerHasDied = false
+        bPlayerHasDied = false
+    end)
 end
 
 --for _, hospital in pairs(HospitalLocations) do

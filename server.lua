@@ -1,9 +1,22 @@
+function shuffle(tbl)
+    for i = #tbl, 2, -1 do
+        local j = math.random(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+    return tbl
+end
+
+local currentModel = 0
 local Round = {}
 
 function ResetRound()
+    currentModel = 0
+
     Round.TimeLeft = Config.Round.DefaultTime
     Round.CurrentMood = Config.Moods[ math.random( #Config.Moods ) ]
     Round.Scoreboard = {}
+
+    Config.Models = shuffle(Config.Models)
 
     if #GetPlayers() > 0 then
         for _, playerId in ipairs(GetPlayers()) do
@@ -37,10 +50,13 @@ Citizen.CreateThread(function()
 end)
 
 
+-- 
+local bSpawnLock = false
 
 function IsCharacterInUse( modelName )
     for _, playerId in ipairs(GetPlayers()) do
         if Round.Scoreboard[playerId] ~= nil and Round.Scoreboard[playerId].Character == modelName then
+            print("Character in use!!!")
             return true
         end
     end
@@ -65,12 +81,17 @@ end
 AddEventHandler("factions:playerJoined", function(pId)
     if pId == nil then pId = source end
 
+    currentModel = currentModel + 1
+
+    print("Me:"..pId..", currentModel:" .. currentModel .. ", model: "..Config.Models[ currentModel ][1])
+
+    math.randomseed(GetGameTimer() + pId)
     -- Add the player to the scoreboard
     Round.Scoreboard[pId] = {
         ['Name'] = GetPlayerName(pId),
         ['Kills'] = 0,
         ['Deaths'] = 0,
-        ['Character'] = FindAvailableCharacter(),
+        ['Character'] = Config.Models[ currentModel ][1],--FindAvailableCharacter(),
     }
 
 end) RegisterServerEvent('factions:playerJoined')
@@ -119,7 +140,7 @@ AddEventHandler('factions:reportDeath', function(killer)
     -- DEBUG: REWARD DEATHS INSTEAD OF KILLS, LUL
     --TriggerClientEvent('factions:cl_killReward', source, Round.Scoreboard[source].Deaths)
 
-    if killer ~= nil then
+    if killer ~= nil and killer ~= source then
         Round.Scoreboard[killer].Kills = Round.Scoreboard[killer].Kills + 1
         TriggerClientEvent('factions:cl_killReward', killer, Round.Scoreboard[killer].Kills)
     end
@@ -131,4 +152,11 @@ RegisterServerEvent('factions:reportDeath')
 AddEventHandler("factions:getScoreboard", function(args, cbId)
     TriggerClientEvent('factions:cl_onCallback_OneParam', source, cbId, Round.Scoreboard)
 end)
-RegisterServerEvent("factions:getScoreboard")  
+RegisterServerEvent("factions:getScoreboard")
+
+-- Get the player id
+
+AddEventHandler("factions:getMyId", function(args, cbId)
+    TriggerClientEvent('factions:cl_onCallback_OneParam', source, cbId, source)
+end)
+RegisterServerEvent("factions:getMyId")  

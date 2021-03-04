@@ -1,7 +1,7 @@
 Config = {}
 
 Config.Round = {
-    ["DefaultTime"] = (60 * 7) + 34,
+    ["DefaultTime"] = (60 * 10) + 54,
 }
 
 Config.Moods = {
