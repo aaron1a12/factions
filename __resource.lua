@@ -9,6 +9,7 @@ client_scripts {
 	'mood.lua',
 	'reticule.lua',
 	'cam.lua',
+	'flashlight.lua',
 	'client.lua',
 	'Client.net.dll',
 }
